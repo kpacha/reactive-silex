@@ -32,7 +32,12 @@ class Stack extends \Pimple
 
     public function listen($port, $host = '127.0.0.1')
     {
-        $this['http']->on('request', $this['app']);
+        $app = $this['app'];
+        $this['http']->on('request', function ($req, $res) use ($app) {
+            $req->on('data', function($data) use ($app, $req, $res) {
+                $app->react($req, $res, $data);
+            });
+        });
         $this->activateMemoryProfilerIfRequired();
         $this['socket']->listen($port, $host);
         $this['loop']->run();

@@ -8,20 +8,35 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReactiveApplication extends Application
 {
 
-    public function __invoke(Request $request, Response $response)
+    public function react(Request $request, Response $response, $requestData = '')
     {
-        $sfRequest = $this->buildSymfonyRequest($request, $response);
+        $sfRequest = $this->buildSymfonyRequest($request, $requestData);
         $sfResponse = $this->getHandledResponse($sfRequest);
         $this->parseSymfonyResponse($response, $sfResponse);
     }
 
-    private function buildSymfonyRequest(Request $request)
+    private function buildSymfonyRequest(Request $request, $requestData = '')
     {
-        return SymfonyRequest::create($request->getPath(), $request->getMethod());
+        $params = $this->extractRequestParameters($requestData);
+        return SymfonyRequest::create($request->getPath(), $request->getMethod(), $params);
+    }
+
+    private function extractRequestParameters($requestData = '')
+    {
+        $params = array();
+        if ($requestData) {
+            $rawParams = explode('&', $requestData);
+            foreach($rawParams as $rawParam){
+                $receivedParam = explode('=', $rawParam);
+                $params[urldecode($receivedParam[0])] = urldecode($receivedParam[1]);
+            }
+        }
+        return $params;
     }
 
     private function getHandledResponse(SymfonyRequest $sfRequest)
