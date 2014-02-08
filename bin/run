@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+if (!$loader = include __DIR__ . '/../vendor/autoload.php') {
+    die('You must set up the project dependencies.');
+}
+
+$silexApp = require_once __DIR__ . '/../src/app.php';
+$stack = new Kpacha\ReactiveSilex\Stack($silexApp);
+
+$app = new \Symfony\Component\Console\Application('ReactiveSilex');
+$app->add(new \Kpacha\ReactiveSilex\ReactiveCommand($stack));
+$app->run();
