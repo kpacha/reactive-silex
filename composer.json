@@ -10,7 +10,7 @@
     ],
     "require": {
         "react/react": "0.3.3",
-        "silex/silex": "~1.1"
+        "silex/silex": "~1.0"
     },
     "autoload": {
         "psr-4": { "Kpacha\\ReactiveSilex\\": "src/" }
