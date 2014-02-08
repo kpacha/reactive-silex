@@ -60,3 +60,5 @@ Also, remember to bind every stack to a different port or you will face some nic
 
 * improve error handling
 * improve request & response parsing
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kpacha/reactive-silex/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
