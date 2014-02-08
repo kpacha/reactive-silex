@@ -45,9 +45,10 @@ class ReactiveApplication extends Application
         try {
             $sfResponse = $this->handle($sfRequest, HttpKernelInterface::MASTER_REQUEST, false);
             $this->terminate($sfRequest, $sfResponse);
+        } catch(NotFoundHttpException $e){
+            $sfResponse = new SymfonyResponse('Ups! ' . $e->getMessage(), 404);
         } catch (\Exception $e) {
-            $sfResponse = new SymfonyResponse('We are sorry, but something went terribly wrong.',
-                    404 /* ignored */, array('X-Status-Code' => 200));
+            $sfResponse = new SymfonyResponse('We are sorry, but something went terribly wrong. ', 500);
         }
         return $sfResponse;
     }
